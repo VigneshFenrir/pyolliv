@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { updateField } from "@/store/hotelSearchSlice"; // your hotel search slice
-import NavBar from "@/components/navbar";
+import NavBar from "@/components/NavBar";
 import { Slider } from "@/components/ui/slider";
 import {
   Select,

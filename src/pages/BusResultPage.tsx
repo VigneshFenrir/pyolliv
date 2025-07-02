@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import NavBar from "@/components/navbar";
+import NavBar from "@/components/NavBar";
 
 const allBuses = [
   {
