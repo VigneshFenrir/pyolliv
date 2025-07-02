@@ -16,7 +16,7 @@ const TripTypeOption: React.FC<TripTypeOptionProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center gap-3 px-4 py-2 rounded-xl font-semibold cursor-pointer transition ${
+      className={`flex items-center gap-3 px-4 py-2 rounded-xl font-semibold cursor-pointer transition w-full md:w-auto ${
         selected ? "bg-[#A9B388] text-white" : "bg-gray-100 text-black"
       }`}
       onClick={() => onclick(value)}
