@@ -1,4 +1,3 @@
-import NavBar from "@/components/navbar";
 import OffersCarousel from "@/components/curousels/OffersCarousel";
 import BusSearch from "@/components/searchUi/BusSearch";
 import FlightSearch from "@/components/searchUi/FlightSearch";
@@ -13,6 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
+import NavBar from "@/components/NavBar";
 
 export type CurrentSearch = "flight" | "bus" | "train" | "hotel";
 
