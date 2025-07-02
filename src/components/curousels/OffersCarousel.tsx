@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -50,7 +50,7 @@ export default function OffersCarousel() {
       </div>
 
       <Swiper
-        modules={[Navigation, Pagination]}
+        modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={20}
         slidesPerView={1}
         pagination={{ clickable: true }}
@@ -66,6 +66,8 @@ export default function OffersCarousel() {
           swiper.navigation.init();
           swiper.navigation.update();
         }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        loop={true}
         breakpoints={{
           640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },

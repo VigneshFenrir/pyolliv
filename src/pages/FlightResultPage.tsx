@@ -266,9 +266,16 @@ const FlightResultsPage: React.FC = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600">
-              No flights found matching your criteria.
-            </p>
+            <div className="text-gray-600 flex flex-col gap-3 justify-center items-center">
+              <div className="flex w-40 items-center mx-auto  ">
+                {" "}
+                <img src={"/images/notfound.svg"} alt="" />
+              </div>
+              <p className="font-semibold text-3xl">
+                {" "}
+                No flights found matching your criteria.
+              </p>
+            </div>
           )}
         </main>
       </div>
