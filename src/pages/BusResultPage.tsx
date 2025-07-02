@@ -120,7 +120,7 @@ const BusResultsPage: React.FC = () => {
           }}
         />
         {/* Sidebar */}
-        <aside className="w-64 bg-white rounded-lg shadow p-5 sticky top-6">
+        <aside className="w-64 bg-white rounded-lg shadow p-5 sticky top-6 md:block hidden">
           <h2 className="text-xl font-semibold text-[#5c745c] mb-4">Filters</h2>
 
           {/* Price Filter */}
