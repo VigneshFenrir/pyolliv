@@ -33,7 +33,7 @@ const NavBar: React.FC<{
       <div className="flex w-40" onClick={() => navigate("/")}>
         <img src="/images/logo.jpg" alt="logo" />
       </div>
-      <nav className="w-full">
+      <nav className="w-full hidden md:block">
         <ul className="flex gap-5 font-semibold items-center  justify-center">
           <li
             className={`flex gap-2 items-center p-1.5 cursor-pointer ${
@@ -76,8 +76,7 @@ const NavBar: React.FC<{
         </ul>
       </nav>
       <div className="flex items-center gap-8">
-        <NavLink to={""} className="flex gap-2 items-center">
-          {" "}
+        <NavLink to={""} className=" gap-2 items-center hidden md:flex">
           <BadgePercent />
           Offers
         </NavLink>

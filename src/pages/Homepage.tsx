@@ -54,7 +54,7 @@ const Homepage: React.FC = () => {
       <NavBar activeItem={currentSearch} onclick={(c) => setCurrentSearch(c)} />{" "}
       {/*  hero */}
       <section
-        className={`relative  container mx-auto h-full min-h-[600px] py-28 px-32 bg-cover bg-center bg-black/100 `}
+        className={`relative  container mx-auto h-full min-h-[600px] px-3 py-3 md:py-28 md:px-32 bg-cover bg-center bg-black/100 `}
         style={{
           backgroundImage: 'url("/images/bg.jpg")',
         }}
