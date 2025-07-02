@@ -113,7 +113,22 @@ const FlightResultsPage: React.FC = () => {
   return (
     <>
       <NavBar activeItem={"flight"} />
-      <div className="min-h-screen flex bg-[#f0f4f0] p-6 gap-6">
+      <div
+        className="min-h-screen flex bg-[#f0f4f0] p-6 gap-6"
+        style={{
+          background: `url("/images/resultbg.jpg")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: "blur(4px)",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            zIndex: 0,
+          }}
+        />{" "}
         {/* Sidebar */}
         <aside className="w-64 bg-white rounded-lg shadow p-5 sticky top-6">
           <h2 className="text-xl font-semibold text-[#5c745c] mb-4">Filters</h2>
@@ -161,9 +176,8 @@ const FlightResultsPage: React.FC = () => {
             </Select>
           </div>
         </aside>
-
         {/* Main Content */}
-        <main className="flex-1 bg-white rounded-lg shadow p-6">
+        <main className="flex-1 bg-white rounded-lg shadow p-6 relative">
           {/* Search Details */}
           <h1 className="text-2xl font-bold text-[#5c745c] mb-6">
             Flight Search

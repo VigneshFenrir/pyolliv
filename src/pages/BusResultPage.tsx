@@ -112,7 +112,7 @@ const BusResultsPage: React.FC = () => {
           className="absolute inset-0"
           style={{
             backdropFilter: "blur(4px)",
-            backgroundColor: "rgba(255, 255, 255, 0.2)", // light transparent white for glass effect
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
             zIndex: 0,
           }}
         />
