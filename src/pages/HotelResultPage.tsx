@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SearchableSelect from "@/components/SearchableSelect";
+import { DatePicker } from "@/components/DatePicker";
+import InputWithLabel from "@/components/InputWithLabel";
 
 const allHotels = [
   {
@@ -95,13 +98,13 @@ const HotelResultsPage: React.FC = () => {
     setFilteredHotels(results);
   }, [hotelSearch, filters]);
 
-  const handleInputChange =
+  const handleChange =
     (field: keyof typeof hotelSearch) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      let value: string | number = e.target.value;
-      if (field === "guests") value = Number(value);
-      dispatch(updateField({ field, value }));
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateField({ field, value: e.target.value }));
     };
+
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
 
   return (
     <>
@@ -178,31 +181,82 @@ const HotelResultsPage: React.FC = () => {
             Hotel Search
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {["location", "checkIn", "checkOut", "guests"].map((field: any) => (
-              <div key={field}>
-                <label className="block font-medium text-gray-700 mb-1">
-                  {field === "location"
-                    ? "location"
-                    : field === "checkIn"
-                    ? "Check-In"
-                    : field === "checkOut"
-                    ? "Check-Out"
-                    : "Guests"}
-                </label>
-                <input
-                  type={
-                    field.includes("checkIn") || field.includes("checkOut")
-                      ? "date"
-                      : field === "guests"
-                      ? "number"
-                      : "text"
-                  }
-                  value={(hotelSearch as any)[field] as string | number}
-                  onChange={handleInputChange(field)}
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#5c745c]"
-                />
-              </div>
-            ))}
+            {["location", "checkIn", "checkOut", "guests"].map((field) => {
+              if (field === "location") {
+                return (
+                  <div key={field}>
+                    <SearchableSelect
+                      label="From"
+                      value={hotelSearch.location}
+                      options={cities}
+                      onChange={(val) =>
+                        dispatch(updateField({ field: "location", value: val }))
+                      }
+                    />
+                  </div>
+                );
+              }
+
+              if (field === "checkIn") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Check In"
+                      selectedDate={
+                        hotelSearch.checkIn
+                          ? new Date(hotelSearch.checkIn)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "checkIn",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select departure date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "checkOut") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Check Out"
+                      selectedDate={
+                        hotelSearch.checkOut
+                          ? new Date(hotelSearch.checkOut)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "checkOut",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select Return Date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "guests") {
+                return (
+                  <div key={field}>
+                    <InputWithLabel
+                      label="Guests"
+                      type="number"
+                      value={hotelSearch.guests.toString()}
+                      onChange={handleChange("guests")}
+                      placeholder={""}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
 
           {/* Hotel Results */}

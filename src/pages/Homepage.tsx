@@ -62,6 +62,9 @@ const Homepage: React.FC = () => {
         <div className="absolute inset-0 bg-black/50 z-0 rounded-xl"></div>
 
         <div className="relative z-0 container mx-auto px-6 lg:px-32">
+          <h1 className="text-white font-semibold text-3xl text-center mb-10">
+            Your Journey Begins Here — Flights, Hotels & More in One Click!
+          </h1>
           <div className="bg-white text-black rounded-2xl p-6 md:p-10 shadow-lg">
             {currentSearch === "flight" && <FlightSearch />}
             {currentSearch === "bus" && <BusSearch />}
@@ -81,11 +84,29 @@ const Homepage: React.FC = () => {
       </section>
       {/* Additional Sections */}
       <section className="container mx-auto px-6 py-16 text-white space-y-6">
-        <article className="bg-gradient-to-r from-[#4b5c44] via-[#5c745c] to-[#8a9b81] p-6 rounded-xl shadow text-white">
+        <article className="bg-gradient-to-r from-[#4b5c44] via-[#5c745c] to-[#8a9b81] p-6 rounded-xl shadow text-white ">
           <h2 className="text-2xl font-bold mb-2">🧳 Exciting Offers</h2>
           <p>Get up to 50% off on domestic and international flights!</p>
         </article>
-        <OffersCarousel />
+
+        {/* Filter Chips */}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap gap-3">
+            {["Flight", "Train", "Bus", "Hotel"].map((item) => (
+              <button
+                key={item}
+                className={`px-4 py-2 rounded-full font-semibold hover:bg-[#e5e5e5] transition ${
+                  item.toLowerCase() === currentSearch
+                    ? "border border-[#4b5c44]"
+                    : " "
+                } bg-white text-[#4b5c44]`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <OffersCarousel />
+        </div>
 
         <article className="bg-gradient-to-r from-[#4b5c44] via-[#5c745c] to-[#8a9b81] p-6 rounded-xl shadow text-white">
           <h2 className="text-2xl font-bold mb-2">✨ Recommended for You</h2>

@@ -3,13 +3,10 @@ import InputWithLabel from "../InputWithLabel";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { updateField } from "@/store/trainSearchSlice";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+
+import SearchableSelect from "../SearchableSelect";
+import { DatePicker } from "../DatePicker";
+import CommonSelect from "../CommonSelect";
 
 const TrainSearch: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,36 +17,57 @@ const TrainSearch: React.FC = () => {
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       dispatch(updateField({ field, value: e.target.value }));
     };
-
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
+  const trainClasses = [
+    { label: "Sleeper", value: "Sleeper" },
+    { label: "3rd AC (3A)", value: "3A" },
+    { label: "2nd AC (2A)", value: "2A" },
+    { label: "1st AC (1A)", value: "1A" },
+  ];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <InputWithLabel
+      <SearchableSelect
         label="From"
-        type="text"
-        placeholder="City or Station"
         value={trainSearch.from}
-        onChange={handleChange("from")}
+        options={cities}
+        onChange={(val) => dispatch(updateField({ field: "from", value: val }))}
       />
-      <InputWithLabel
-        label="To"
-        type="text"
-        placeholder="Destination"
+      <SearchableSelect
+        label="to"
         value={trainSearch.to}
-        onChange={handleChange("to")}
+        options={cities}
+        onChange={(val) => dispatch(updateField({ field: "to", value: val }))}
       />
-      <InputWithLabel
+      <DatePicker
         label="Departure"
-        type="date"
-        placeholder=""
-        value={trainSearch.departure}
-        onChange={handleChange("departure")}
+        selectedDate={
+          trainSearch.departure ? new Date(trainSearch.departure) : undefined
+        }
+        onDateChange={(date) =>
+          dispatch(
+            updateField({
+              field: "departure",
+              value: date ? date.toISOString().split("T")[0] : "",
+            })
+          )
+        }
+        placeholder="Select departure date"
       />
-      <InputWithLabel
+
+      <DatePicker
         label="Return (Optional)"
-        type="date"
-        placeholder=""
-        value={trainSearch.returnDate}
-        onChange={handleChange("returnDate")}
+        selectedDate={
+          trainSearch.returnDate ? new Date(trainSearch.returnDate) : undefined
+        }
+        onDateChange={(date) =>
+          dispatch(
+            updateField({
+              field: "returnDate",
+              value: date ? date.toISOString().split("T")[0] : "",
+            })
+          )
+        }
+        placeholder="Select departure date"
       />
       <InputWithLabel
         label="Passengers"
@@ -58,30 +76,15 @@ const TrainSearch: React.FC = () => {
         value={trainSearch.passengers.toString()}
         onChange={handleChange("passengers")}
       />
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="travelClass"
-          className="text-sm font-semibold text-gray-700"
-        >
-          Class
-        </label>
-        <Select
-          value={trainSearch.travelClass}
-          onValueChange={(value) =>
-            dispatch(updateField({ field: "travelClass", value }))
-          }
-        >
-          <SelectTrigger id="travelClass" className="w-full">
-            <SelectValue placeholder="Select class" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Sleeper">Sleeper</SelectItem>
-            <SelectItem value="3A">3rd AC (3A)</SelectItem>
-            <SelectItem value="2A">2nd AC (2A)</SelectItem>
-            <SelectItem value="1A">1st AC (1A)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+
+      <CommonSelect
+        label={"Class"}
+        value={trainSearch.travelClass}
+        onChange={(val) =>
+          dispatch(updateField({ field: "travelClass", value: val }))
+        }
+        options={trainClasses}
+      />
     </div>
   );
 };

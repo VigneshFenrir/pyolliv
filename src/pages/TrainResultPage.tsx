@@ -11,6 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import SearchableSelect from "@/components/SearchableSelect";
+import { DatePicker } from "@/components/DatePicker";
+import InputWithLabel from "@/components/InputWithLabel";
+import CommonSelect from "@/components/CommonSelect";
 
 const allTrains = [
   {
@@ -102,14 +106,20 @@ const TrainResultsPage: React.FC = () => {
     setFilteredTrains(results);
   }, [trainSearch, filters]);
 
-  const handleInputChange =
+  const handleChange =
     (field: keyof typeof trainSearch) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      let value: string | number = e.target.value;
-      if (field === "passengers") value = Number(value);
-      dispatch(updateField({ field, value }));
+      dispatch(updateField({ field, value: e.target.value }));
     };
 
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
+
+  const trainClasses = [
+    { label: "Sleeper", value: "Sleeper" },
+    { label: "3rd AC (3A)", value: "3A" },
+    { label: "2nd AC (2A)", value: "2A" },
+    { label: "1st AC (1A)", value: "1A" },
+  ];
   return (
     <>
       <NavBar activeItem={"train"} />
@@ -191,54 +201,111 @@ const TrainResultsPage: React.FC = () => {
               "returnDate",
               "passengers",
               "travelClass",
-            ].map((field: any) => (
-              <div key={field}>
-                <label className="block font-medium text-gray-700 mb-1">
-                  {field === "from"
-                    ? "From"
-                    : field === "to"
-                    ? "To"
-                    : field === "departure"
-                    ? "Departure"
-                    : field === "returnDate"
-                    ? "Return"
-                    : field === "passengers"
-                    ? "Passengers"
-                    : "Class"}
-                </label>
-                {field === "travelClass" ? (
-                  <Select
-                    value={trainSearch.travelClass}
-                    onValueChange={(value) =>
-                      dispatch(updateField({ field: "travelClass", value }))
-                    }
-                  >
-                    <SelectTrigger id="travelClass" className="w-full">
-                      <SelectValue placeholder="Select class" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Sleeper">Sleeper</SelectItem>
-                      <SelectItem value="3A">3rd AC (3A)</SelectItem>
-                      <SelectItem value="2A">2nd AC (2A)</SelectItem>
-                      <SelectItem value="1A">1st AC (1A)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <input
-                    type={
-                      field.includes("Date")
-                        ? "date"
-                        : field === "passengers"
-                        ? "number"
-                        : "text"
-                    }
-                    value={(trainSearch as any)[field] as string | number}
-                    onChange={handleInputChange(field)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#5c745c]"
-                  />
-                )}
-              </div>
-            ))}
+            ].map((field) => {
+              if (field === "from") {
+                return (
+                  <div key={field}>
+                    <SearchableSelect
+                      label="From"
+                      value={trainSearch.from}
+                      options={cities}
+                      onChange={(val) =>
+                        dispatch(updateField({ field: "from", value: val }))
+                      }
+                    />
+                  </div>
+                );
+              }
+              if (field === "to") {
+                return (
+                  <div key={field}>
+                    <SearchableSelect
+                      label="To"
+                      value={trainSearch.to}
+                      options={cities}
+                      onChange={(val) =>
+                        dispatch(updateField({ field: "to", value: val }))
+                      }
+                    />
+                  </div>
+                );
+              }
+              if (field === "departure") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Departure"
+                      selectedDate={
+                        trainSearch.departure
+                          ? new Date(trainSearch.departure)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "departure",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select departure date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "returnDate") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Return Date"
+                      selectedDate={
+                        trainSearch.departure
+                          ? new Date(trainSearch.returnDate)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "returnDate",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select Return Date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "passengers") {
+                return (
+                  <div key={field}>
+                    <InputWithLabel
+                      label="Passengers"
+                      type="number"
+                      value={trainSearch.passengers.toString()}
+                      onChange={handleChange("passengers")}
+                      placeholder={""}
+                    />
+                  </div>
+                );
+              }
+              if (field === "travelClass") {
+                return (
+                  <div key={field}>
+                    <CommonSelect
+                      label="Class"
+                      value={trainSearch.travelClass}
+                      onChange={(val) =>
+                        dispatch(
+                          updateField({ field: "travelClass", value: val })
+                        )
+                      }
+                      options={trainClasses}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
 
           {/* Train Results */}

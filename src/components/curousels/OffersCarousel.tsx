@@ -8,23 +8,27 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const offers = [
   {
-    title: "🏝️ Summer Escape",
-    description: "Up to 40% off on Maldives packages.",
+    title: "🏝️ Maldives Magic",
+    description:
+      "Save Up to 40% on dreamy island getaways! Soak in turquoise waters, white sands, and luxury like never before.",
     image: "/images/offers.jpg",
   },
   {
-    title: "✈️ International Deals",
-    description: "Flat 20% off on flights to Europe.",
+    title: "✈️ Euro Flight Fest",
+    description:
+      "Flat 20% Off on all flights to Europe! Your European adventure just got a whole lot cheaper.",
     image: "/images/offer2.jpg",
   },
   {
-    title: "🧳 Group Discounts",
-    description: "Book for 4+ people and save big.",
+    title: "🧳 Squad Saver",
+    description:
+      "Big Discounts for groups of 4 or more! More friends, more fun — and more savings.",
     image: "/images/offer3.jpg",
   },
   {
-    title: "🔥 Flash Sale",
-    description: "Last-minute deals for domestic travel.",
+    title: "🔥 Flash Fare Frenzy",
+    description:
+      "Limited-Time Domestic Deals! Grab last-minute travel offers before they’re gone.",
     image: "/images/offer2.jpg",
   },
 ];
@@ -75,13 +79,24 @@ export default function OffersCarousel() {
         }}
       >
         {offers.map((offer, index) => (
-          <SwiperSlide key={index} className="py-8">
-            <div className="relative group rounded overflow-hidden shadow border border-[#5c745c] h-64 rounded-tl-3xl rounded-br-3xl">
-              <img
-                src={offer.image}
-                alt={offer.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+          <SwiperSlide key={index} className="py-8 h-full">
+            <div className="flex flex-col h-full gap-3 px-2 py-2 border bg-amber-50 rounded shadow">
+              {/* Image Section */}
+              <div className="relative group rounded overflow-hidden border border-[#5c745c] h-64 rounded-tl-3xl rounded-br-3xl">
+                <img
+                  src={offer.image}
+                  alt={offer.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+
+              {/* Text Section */}
+              <div className="flex flex-col justify-between flex-1 px-4 pb-4">
+                <p className="text-lg font-semibold text-black">
+                  {offer.title}
+                </p>
+                <p className="text-gray-600 font-medium">{offer.description}</p>
+              </div>
             </div>
           </SwiperSlide>
         ))}

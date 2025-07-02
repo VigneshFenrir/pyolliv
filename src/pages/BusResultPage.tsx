@@ -11,6 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import NavBar from "@/components/NavBar";
+import SearchableSelect from "@/components/SearchableSelect";
+import { DatePicker } from "@/components/DatePicker";
+import InputWithLabel from "@/components/InputWithLabel";
 
 const allBuses = [
   {
@@ -89,13 +92,13 @@ const BusResultsPage: React.FC = () => {
     setFilteredBuses(results);
   }, [busSearch, filters]);
 
-  const handleInputChange =
+  const handleChange =
     (field: keyof typeof busSearch) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      let value: string | number = e.target.value;
-      if (field === "passengers") value = Number(value);
-      dispatch(updateField({ field, value }));
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateField({ field, value: e.target.value }));
     };
+
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
 
   return (
     <>
@@ -168,36 +171,77 @@ const BusResultsPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-[#5c745c] mb-6">Bus Search</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {["from", "to", "departure", "returnDate", "passengers"].map(
-              (field: any) => (
-                <div key={field}>
-                  <label className="block font-medium text-gray-700 mb-1">
-                    {field === "from"
-                      ? "From"
-                      : field === "to"
-                      ? "To"
-                      : field === "departure"
-                      ? "Departure"
-                      : field === "returnDate"
-                      ? "Return"
-                      : "Passengers"}
-                  </label>
-                  <input
-                    type={
-                      field.includes("Date")
-                        ? "date"
-                        : field === "passengers"
-                        ? "number"
-                        : "text"
-                    }
-                    value={(busSearch as any)[field]}
-                    onChange={handleInputChange(field)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#5c745c]"
-                  />
-                </div>
-              )
+              (field) => {
+                if (field === "from") {
+                  return (
+                    <div key={field}>
+                      <SearchableSelect
+                        label="From"
+                        value={busSearch.from}
+                        options={cities}
+                        onChange={(val) =>
+                          dispatch(updateField({ field: "from", value: val }))
+                        }
+                      />
+                    </div>
+                  );
+                }
+                if (field === "to") {
+                  return (
+                    <div key={field}>
+                      <SearchableSelect
+                        label="To"
+                        value={busSearch.to}
+                        options={cities}
+                        onChange={(val) =>
+                          dispatch(updateField({ field: "to", value: val }))
+                        }
+                      />
+                    </div>
+                  );
+                }
+                if (field === "departure") {
+                  return (
+                    <div key={field}>
+                      <DatePicker
+                        label="Departure"
+                        selectedDate={
+                          busSearch.departure
+                            ? new Date(busSearch.departure)
+                            : undefined
+                        }
+                        onDateChange={(date) =>
+                          dispatch(
+                            updateField({
+                              field: "departure",
+                              value: date
+                                ? date.toISOString().split("T")[0]
+                                : "",
+                            })
+                          )
+                        }
+                        placeholder="Select departure date"
+                      />
+                    </div>
+                  );
+                }
+
+                if (field === "passengers") {
+                  return (
+                    <div key={field}>
+                      <InputWithLabel
+                        label="Passengers"
+                        type="number"
+                        value={busSearch.passengers.toString()}
+                        onChange={handleChange("passengers")}
+                        placeholder={""}
+                      />
+                    </div>
+                  );
+                }
+              }
             )}
           </div>
-
           {/* Bus Results */}
           <h2 className="text-xl font-semibold text-[#5c745c] mb-4">
             Available Buses

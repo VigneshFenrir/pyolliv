@@ -3,6 +3,8 @@ import InputWithLabel from "../InputWithLabel";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { updateField } from "@/store/busSearchSlice";
+import SearchableSelect from "../SearchableSelect";
+import { DatePicker } from "../DatePicker";
 
 const BusSearch: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,29 +15,36 @@ const BusSearch: React.FC = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(updateField({ field, value: e.target.value }));
     };
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <InputWithLabel
-        label="From"
-        type="text"
-        placeholder="City"
+      <SearchableSelect
+        label={"From"}
         value={busSearch.from}
-        onChange={handleChange("from")}
+        options={cities}
+        onChange={(val) => dispatch(updateField({ field: "from", value: val }))}
       />
-      <InputWithLabel
-        label="To"
-        type="text"
-        placeholder="City"
+      <SearchableSelect
+        label={"To"}
         value={busSearch.to}
-        onChange={handleChange("to")}
+        options={cities}
+        onChange={(val) => dispatch(updateField({ field: "to", value: val }))}
       />
-      <InputWithLabel
-        label="Departure"
-        type="date"
-        placeholder=""
-        value={busSearch.departure}
-        onChange={handleChange("departure")}
+
+      <DatePicker
+        label={"departure"}
+        selectedDate={
+          busSearch.departure ? new Date(busSearch.departure) : undefined
+        }
+        onDateChange={(date) =>
+          dispatch(
+            updateField({
+              field: "departure",
+              value: date ? date.toISOString().split("T")[0] : "",
+            })
+          )
+        }
       />
       <InputWithLabel
         label="Passengers"

@@ -11,6 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import NavBar from "@/components/NavBar";
+import SearchableSelect from "@/components/SearchableSelect";
+import { DatePicker } from "@/components/DatePicker";
+import InputWithLabel from "@/components/InputWithLabel";
+import CommonSelect from "@/components/CommonSelect";
 
 const allFlights = [
   {
@@ -102,13 +106,19 @@ const FlightResultsPage: React.FC = () => {
     setFilteredFlights(results);
   }, [flightSearch, filters]);
 
-  const handleInputChange =
+  const handleChange =
     (field: keyof typeof flightSearch) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      let value: string | number = e.target.value;
-      if (field === "passengers") value = Number(value);
-      dispatch(updateField({ field, value }));
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateField({ field, value: e.target.value }));
     };
+
+  const cities = ["New York", "London", "Paris", "Tokyo", "Dubai", "Delhi"];
+  const flightClasses = [
+    { label: "Basic Economy", value: "Basic Economy" },
+    { label: "Economy", value: "Economy" },
+    { label: "Premium Economy", value: "Premium Economy" },
+    { label: "First Class", value: "First Class" },
+  ];
 
   return (
     <>
@@ -190,47 +200,111 @@ const FlightResultsPage: React.FC = () => {
               "returnDate",
               "passengers",
               "travelClass",
-            ].map((field: any) => (
-              <div key={field}>
-                <label className="block font-medium text-gray-700 mb-1">
-                  {field === "from"
-                    ? "From"
-                    : field === "to"
-                    ? "To"
-                    : field === "departure"
-                    ? "Departure"
-                    : field === "returnDate"
-                    ? "Return"
-                    : field === "passengers"
-                    ? "Passengers"
-                    : "Class"}
-                </label>
-                {field === "travelClass" ? (
-                  <select
-                    value={flightSearch.travelClass}
-                    onChange={handleInputChange("travelClass")}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#5c745c]"
-                  >
-                    <option> Economy </option>
-                    <option> Business </option>
-                    <option> First </option>
-                  </select>
-                ) : (
-                  <input
-                    type={
-                      field.includes("Date")
-                        ? "date"
-                        : field === "passengers"
-                        ? "number"
-                        : "text"
-                    }
-                    value={(flightSearch as any)[field] as string | number}
-                    onChange={handleInputChange(field)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#5c745c]"
-                  />
-                )}
-              </div>
-            ))}
+            ].map((field) => {
+              if (field === "from") {
+                return (
+                  <div key={field}>
+                    <SearchableSelect
+                      label="From"
+                      value={flightSearch.from}
+                      options={cities}
+                      onChange={(val) =>
+                        dispatch(updateField({ field: "from", value: val }))
+                      }
+                    />
+                  </div>
+                );
+              }
+              if (field === "to") {
+                return (
+                  <div key={field}>
+                    <SearchableSelect
+                      label="To"
+                      value={flightSearch.to}
+                      options={cities}
+                      onChange={(val) =>
+                        dispatch(updateField({ field: "to", value: val }))
+                      }
+                    />
+                  </div>
+                );
+              }
+              if (field === "departure") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Departure"
+                      selectedDate={
+                        flightSearch.departure
+                          ? new Date(flightSearch.departure)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "departure",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select departure date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "returnDate") {
+                return (
+                  <div key={field}>
+                    <DatePicker
+                      label="Return Date"
+                      selectedDate={
+                        flightSearch.departure
+                          ? new Date(flightSearch.returnDate)
+                          : undefined
+                      }
+                      onDateChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "returnDate",
+                            value: date ? date.toISOString().split("T")[0] : "",
+                          })
+                        )
+                      }
+                      placeholder="Select Return Date"
+                    />
+                  </div>
+                );
+              }
+              if (field === "passengers") {
+                return (
+                  <div key={field}>
+                    <InputWithLabel
+                      label="Passengers"
+                      type="number"
+                      value={flightSearch.passengers.toString()}
+                      onChange={handleChange("passengers")}
+                      placeholder={""}
+                    />
+                  </div>
+                );
+              }
+              if (field === "travelClass") {
+                return (
+                  <div key={field}>
+                    <CommonSelect
+                      label="Class"
+                      value={flightSearch.travelClass}
+                      onChange={(val) =>
+                        dispatch(
+                          updateField({ field: "travelClass", value: val })
+                        )
+                      }
+                      options={flightClasses}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
 
           {/* Flight Results */}
